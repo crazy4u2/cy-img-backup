@@ -1,68 +1,62 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# cy-imgs
 
-## Available Scripts
+싸이월드 이미지를 다운받기 위한 템플릿
 
-In the project directory, you can run:
+## 준비사항
 
-### `yarn start`
+- 싸이월드는 이미지 하나를 가지고 request query parameter의 width 와 height 값을 조정하여 썸네일로도 쓰고 게시물 이미지로도 쓴다
+- width=239, height=239 로 요청하면 썸네일에 쓰이고 저 값을 max 으로 조절하면 큰 이미지로 나온다
+- 그걸 이용하면 썸네일을 한 페이지에 다 띄어놓고 모든 이미지 주소를 수집해서 width와 height 에 대한 부분을 수정하여서 다운로드에 필요한 이미지 주소를 수집할 수 있다.
+- 참고로 싸이월드는 jQuery 가 사용되어서 dom 에 대한 조작 및 수집이 편하다.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 이미지 주소 수집하기
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+- 크롬 브라우저를 이용하여 싸이월드에 로그인 하고
+- 사진첩 메뉴에 들어가서
+- 그리고 크롬 개발자 도구를 열고
 
-### `yarn test`
+```
+function getImgs() {
+  $('.btn_list_more button').click()
+}
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+const timer = setInterval(getImgs, 1500)
+// 1.5 초 마다 더보기 버튼 클릭. 만약에 사진첩 불러들이는 속도가 늦다면 뒤에 1500
+//숫자를 더 늘려줘서 조절한다. 계속 빠르게 누르면 나왔던 이미지가 계속 나온다
 
-### `yarn build`
+// 적당히 티비를 보거나 밥을 먹거나 하고 난 다음 돌아와서
+// 싸이월드 사진첩을 확인해보고 맨 아래 더 보기 버튼이 사라지면
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+clearInterval(timer); // 안해주면 컴퓨터가 아주 싫어한다.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+// 추출할 이미지들을 담을 빈 배열 선언
+const cyImgs = [];
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+// 선언한 배열에 이미지들 주소를 push
+$('.timeline_img').each(function(i, t) {cyImgs.push($(t).find('img').attr('src').replace('width=239&height=239','width=2000')});
 
-### `yarn eject`
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- 위 코드는 적당한 빈 배열에 우리가 필요로 이미지 주소를 수집해준다.
+- 싸이월드 중흥기에는 최대로 크게 올릴 수 있는 이미지가 800px 정도였지만 확인해보니 그거보다 큰 사이즈로 저정은 되고 있다.
+- replace 코드부분의 2000 을 원하는 너비로 조정해서 사용할 수 있다.
+- 이렇게 하고
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+console.log(cyImgs)
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+해보면 우리가 찾고자 하는 이미지 주소가 예쁘게 배열에 담겨있는 것이 확인된다. 이 내용을 복사해서 컴퓨터의 적당한 txt 파일에 저장한 다음 해당 내용을 배열로 만들어주기 위해 필요없는 부분(라인넘버 등)을 제거하고 각 url 마다 끝에 comma 를 추가하고 대괄호로 감싸준다. 개발자라면 IDE 의 다중라인 선택 기능을 이용하면 편하다.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### 이미지 렌더링 하기
 
-## Learn More
+- 이렇게 수집된 배열을 cy.js 에 추가하고
+- App.js 에서 렌더링하여 모든 이미지를 하나의 웹페이지에 띄운다.
+- 각자 사용하기 좋은 이미지 다운로드 크롬 확장도구를 설치하여서(표시되어 있는 모든 이미지를 다 받아주는 확장기능이 있다.) 다 받아버린다.
+- 이로서 싸이월드 추억을 백업할 수 있게 된다.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 이미지 한방에 다운로드 받는 확장프로그램
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- https://chrome.google.com/webstore/detail/bulk-media-downloader/ehfdcgbfcboceiclmjaofdannmjdeaoi?hl=ko
+- 이 확장 프로그램을 이용하면 위에서 렌더링한 모든 이미지를 한방에 내려받을 수 있다.
+- 다른 확장 프로그램도 있지만 어떤 이유에서인지 중간중간 다운로드 경로를 물어보는 둥 잘 되지 않는 문제점이 있다.
