@@ -61,3 +61,7 @@ console.log(cyImgs)
 - https://chrome.google.com/webstore/detail/bulk-media-downloader/ehfdcgbfcboceiclmjaofdannmjdeaoi?hl=ko
 - 이 확장 프로그램을 이용하면 위에서 렌더링한 모든 이미지를 한방에 내려받을 수 있다.
 - 다른 확장 프로그램도 있지만 어떤 이유에서인지 중간중간 다운로드 경로를 물어보는 둥 잘 되지 않는 문제점이 있다.
+
+### 기타
+- 필수조건으로 node.js 등이 설치되어 있어야 합니다.
+- 이게 다 도대체 무슨소리인가요? ==> 개발자가 아닐 가능성이 큽니다. 개발자는 아닌데 싸이월드 이미지는 다 받아야하겠다는 분은 이메일로 연락주시면 도와드리겠습니다. jejaforce@gmail.com
